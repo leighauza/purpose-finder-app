@@ -1,0 +1,221 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Custom color palette for Vedic astrology app with warm, spiritual tones */
+  --background: #faf7f2; /* Cream background */
+  --foreground: #3d3930; /* Dark text for readability */
+  --card: #ffffff;
+  --card-foreground: #3d3930;
+  --popover: #ffffff;
+  --popover-foreground: #3d3930;
+  --primary: #e07b53; /* Terracotta primary */
+  --primary-foreground: #ffffff;
+  --secondary: #8b9d83; /* Sage green secondary */
+  --secondary-foreground: #ffffff;
+  --muted: #f0ebe3;
+  --muted-foreground: #6b6456;
+  --accent: #d4af37; /* Warm gold accent */
+  --accent-foreground: #3d3930;
+  --destructive: #d64545;
+  --destructive-foreground: #ffffff;
+  --border: #e5dfd5;
+  --input: #e5dfd5;
+  --ring: #e07b53;
+  --chart-1: #e07b53;
+  --chart-2: #8b9d83;
+  --chart-3: #d4af37;
+  --chart-4: #c4947a;
+  --chart-5: #a8b89f;
+  --radius: 1rem; /* 16px rounded corners */
+  --sidebar: #ffffff;
+  --sidebar-foreground: #3d3930;
+  --sidebar-primary: #e07b53;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f0ebe3;
+  --sidebar-accent-foreground: #3d3930;
+  --sidebar-border: #e5dfd5;
+  --sidebar-ring: #e07b53;
+}
+
+.dark {
+  --background: #2a2621;
+  --foreground: #faf7f2;
+  --card: #3d3930;
+  --card-foreground: #faf7f2;
+  --popover: #3d3930;
+  --popover-foreground: #faf7f2;
+  --primary: #e07b53;
+  --primary-foreground: #ffffff;
+  --secondary: #8b9d83;
+  --secondary-foreground: #ffffff;
+  --muted: #4a4339;
+  --muted-foreground: #b8afa3;
+  --accent: #d4af37;
+  --accent-foreground: #2a2621;
+  --destructive: #d64545;
+  --destructive-foreground: #ffffff;
+  --border: #4a4339;
+  --input: #4a4339;
+  --ring: #e07b53;
+  --chart-1: #e07b53;
+  --chart-2: #8b9d83;
+  --chart-3: #d4af37;
+  --chart-4: #c4947a;
+  --chart-5: #a8b89f;
+  --sidebar: #3d3930;
+  --sidebar-foreground: #faf7f2;
+  --sidebar-primary: #e07b53;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #4a4339;
+  --sidebar-accent-foreground: #faf7f2;
+  --sidebar-border: #4a4339;
+  --sidebar-ring: #e07b53;
+}
+
+@theme inline {
+  /* Custom fonts: DM Serif Display for headings, Plus Jakarta Sans for body */
+  --font-sans: "Plus Jakarta Sans", "Plus Jakarta Sans Fallback", system-ui, -apple-system, sans-serif;
+  --font-serif: "DM Serif Display", "DM Serif Display Fallback", serif;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  /* Apply serif font to headings for elegant spiritual feel */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-serif;
+  }
+}
+
+/* Adding custom animations for delightful interactions */
+@layer utilities {
+  /* Fade in animation for messages */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Bounce animation for success checkmark */
+  @keyframes bounceIn {
+    0% {
+      transform: scale(0);
+      opacity: 0;
+    }
+    50% {
+      transform: scale(1.1);
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  /* Slide in from right animation for pages */
+  @keyframes slideInRight {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  /* Slide in from left animation for pages */
+  @keyframes slideInLeft {
+    from {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  /* Pulse animation for skeleton loaders */
+  @keyframes pulse-soft {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
+
+  .animate-fade-in-up {
+    animation: fadeInUp 0.3s ease-out;
+  }
+
+  .animate-bounce-in {
+    animation: bounceIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+
+  .animate-slide-in-right {
+    animation: slideInRight 0.3s ease-out;
+  }
+
+  .animate-slide-in-left {
+    animation: slideInLeft 0.3s ease-out;
+  }
+
+  .animate-pulse-soft {
+    animation: pulse-soft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+}
