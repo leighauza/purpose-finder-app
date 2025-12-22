@@ -1,6 +1,6 @@
 // app/api/charts/calculate/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { calculateAndSaveVedicCharts } from '@/lib/calculateVedicCharts';
+import { calculateAndSaveVedicCharts } from '../../../../lib/calculateVedicCharts';
 
 export async function POST(req: NextRequest) {
   try {
