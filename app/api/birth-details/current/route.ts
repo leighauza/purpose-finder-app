@@ -48,11 +48,13 @@ export async function GET() {
 
     console.log("Birth details found:", !!data)
 
+    const safeBirthDetail = JSON.parse(JSON.stringify(data));
+
     // Return with consistent camelCase naming for frontend
-    return NextResponse.json({ 
-      birthDetail: data,  // Changed from birth_detail to birthDetail
-      success: true 
-    })
+    return NextResponse.json({
+      birthDetail: safeBirthDetail,
+      success: true,
+    });
 
   } catch (error) {
     console.error("Birth details current error:", error)
