@@ -1,3 +1,5 @@
+export const runtime = 'nodejs';
+
 // app/api/birth-details/webhook/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { calculateAndSaveVedicCharts } from '../../../../lib/calculateVedicCharts';
