@@ -5,9 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
-import { Progress } from "@/components/ui/progress"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -19,22 +17,16 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { useRouter } from "next/navigation"
 import {
   Calendar,
   Clock,
   MapPin,
   User,
-  CreditCard,
   LogOut,
   ChevronDown,
   ChevronUp,
-  Download,
   Copy,
-  CheckCircle2,
-  XCircle,
-  Clock3,
 } from "lucide-react"
 import { haptic } from "@/lib/haptic"
 import { useToast } from "@/hooks/use-toast"
@@ -62,39 +54,6 @@ export function SettingsContent() {
 
   const [isBirthDetailsLoading, setIsBirthDetailsLoading] = useState(true)
 
-  // Subscription & payment mock data can stay for now
-  const subscription = {
-    plan: "Free Trial",
-    messagesLeft: 18,
-    maxMessages: 20,
-  }
-
-  const paymentHistory = [
-    {
-      id: "1",
-      date: "2024-12-01",
-      amount: "₱299",
-      status: "completed" as const,
-      receiptUrl: "#",
-    },
-    {
-      id: "2",
-      date: "2024-11-01",
-      amount: "₱299",
-      status: "completed" as const,
-      receiptUrl: "#",
-    },
-    {
-      id: "3",
-      date: "2024-10-01",
-      amount: "₱299",
-      status: "failed" as const,
-      receiptUrl: null,
-    },
-  ]
-
-  const trialProgress = (subscription.messagesLeft / subscription.maxMessages) * 100
-
   // Load active/current birth details + user email
   useEffect(() => {
     async function loadSettingsData() {
@@ -104,11 +63,10 @@ export function SettingsContent() {
         let birthDetail = null
         if (bdRes.ok) {
           const bdData = await bdRes.json()
-          birthDetail = bdData.birth_detail
+          birthDetail = bdData.birthDetail // Updated to match new API response
         }
 
-        // 2) User email (if you have an API for profile; for now just leave empty or mock)
-        // You can replace this with an actual /api/me call later.
+        // 2) User email - for now empty, can add /api/me later
         const email = ""
 
         if (birthDetail) {
@@ -182,18 +140,9 @@ Timezone: ${userData.timezone || "Unknown"}`
     }
   }
 
-  const handleDownloadReceipt = (receiptUrl: string) => {
-    haptic.light()
-    toast({
-      title: "Downloading receipt",
-      description: "Your receipt will be downloaded shortly.",
-    })
-    window.open(receiptUrl, "_blank")
-  }
-
   return (
     <div className="space-y-6">
-      {/* Trial Usage */}
+      {/* COMMENTED OUT FOR BETA - RESTORE WHEN IMPLEMENTING PAID SUBSCRIPTIONS
       <Card className="border-border shadow-lg">
         <CardHeader>
           <CardTitle className="font-serif flex items-center gap-2">
@@ -227,8 +176,9 @@ Timezone: ${userData.timezone || "Unknown"}`
           </div>
         </CardContent>
       </Card>
+      */}
 
-      {/* Birth Details */}
+      {/* Birth Details - ACTIVE */}
       <Card className="border-border shadow-lg">
         <CardHeader
           className="cursor-pointer"
@@ -332,7 +282,7 @@ Timezone: ${userData.timezone || "Unknown"}`
         )}
       </Card>
 
-      {/* Subscription Section */}
+      {/* COMMENTED OUT FOR BETA - RESTORE WHEN IMPLEMENTING PAID SUBSCRIPTIONS
       <Card className="border-border shadow-lg">
         <CardHeader>
           <CardTitle className="font-serif flex items-center gap-2">
@@ -363,8 +313,9 @@ Timezone: ${userData.timezone || "Unknown"}`
           </Button>
         </CardContent>
       </Card>
+      */}
 
-      {/* Payment Method Section */}
+      {/* COMMENTED OUT FOR BETA - RESTORE WHEN IMPLEMENTING PAYMENT METHODS
       <Card className="border-border shadow-lg">
         <CardHeader>
           <CardTitle className="font-serif flex items-center gap-2">
@@ -398,8 +349,9 @@ Timezone: ${userData.timezone || "Unknown"}`
           </Button>
         </CardContent>
       </Card>
+      */}
 
-      {/* Payment History Section */}
+      {/* COMMENTED OUT FOR BETA - RESTORE WHEN IMPLEMENTING PAYMENT HISTORY
       <Card className="border-border shadow-lg">
         <CardHeader>
           <CardTitle className="font-serif">Payment History</CardTitle>
@@ -472,8 +424,9 @@ Timezone: ${userData.timezone || "Unknown"}`
           )}
         </CardContent>
       </Card>
+      */}
 
-      {/* Account Section */}
+      {/* Account Section - ACTIVE */}
       <Card className="border-border shadow-lg">
         <CardHeader>
           <CardTitle className="font-serif">Account</CardTitle>

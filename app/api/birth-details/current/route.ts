@@ -1,20 +1,25 @@
 // app/api/birth-details/current/route.ts
-import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { NextResponse } from "next/server"
+import { createClient } from "@/lib/supabase/server"
 
 export async function GET() {
   try {
-    const supabase = await createClient();
-
+    const supabase = await createClient()
+    
+    // Check authentication
     const {
       data: { user },
       error: authError,
-    } = await supabase.auth.getUser();
+    } = await supabase.auth.getUser()
+    
     if (authError || !user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      console.error("Auth error in current birth details:", authError)
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    // Prefer the active row; if you don't have is_active yet, fallback to latest by created_at.
+    console.log("Fetching birth details for user:", user.id)
+
+    // Get active birth detail for this user
     const { data, error } = await supabase
       .from("birth_details")
       .select("*")
@@ -22,22 +27,29 @@ export async function GET() {
       .eq("is_active", true)
       .order("created_at", { ascending: false })
       .limit(1)
-      .maybeSingle(); // returns null if none
+      .maybeSingle()
 
     if (error) {
-      console.error("Fetch birth_details error", error);
+      console.error("Fetch birth_details error:", error)
       return NextResponse.json(
         { error: "Failed to load birth details" },
-        { status: 500 },
-      );
+        { status: 500 }
+      )
     }
 
-    return NextResponse.json({ birth_detail: data });
+    console.log("Birth details found:", !!data)
+
+    // Return with consistent camelCase naming for frontend
+    return NextResponse.json({ 
+      birthDetail: data,  // Changed from birth_detail to birthDetail
+      success: true 
+    })
+
   } catch (error) {
-    console.error("Birth details current error", error);
+    console.error("Birth details current error:", error)
     return NextResponse.json(
       { error: "Failed to load birth details" },
-      { status: 500 },
-    );
+      { status: 500 }
+    )
   }
 }

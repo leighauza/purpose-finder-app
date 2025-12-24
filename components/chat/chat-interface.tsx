@@ -24,7 +24,7 @@ type Message = {
 export function ChatInterface() {
   const router = useRouter()
   const [messages, setMessages] = useState<Message[]>([])
-  const [messagesLeft, setMessagesLeft] = useState<number | null>(20)
+  const [messagesLeft, setMessagesLeft] = useState<number | null>(null) // Changed to null for unlimited beta
   const [isTyping, setIsTyping] = useState(false)
   const [showGreeting, setShowGreeting] = useState(false)
   const [isAtBottom, setIsAtBottom] = useState(true)
@@ -33,6 +33,7 @@ export function ChatInterface() {
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const messagesContainerRef = useRef<HTMLDivElement>(null)
 
+  /* COMMENTED OUT FOR BETA - RESTORE WHEN IMPLEMENTING PAID TIERS
   // Fetch subscription status on mount
   useEffect(() => {
     const checkSubscription = async () => {
@@ -52,6 +53,31 @@ export function ChatInterface() {
       }
     }
     checkSubscription()
+  }, [])
+  */
+
+  // Load chat history on mount
+  useEffect(() => {
+    const loadMessages = async () => {
+      try {
+        const res = await fetch('/api/chat/history')
+        if (res.ok) {
+          const data = await res.json()
+          if (data.messages && data.messages.length > 0) {
+            const formattedMessages = data.messages.map((msg: any) => ({
+              id: msg.id,
+              role: msg.role,
+              content: msg.content,
+              timestamp: new Date(msg.created_at)
+            }))
+            setMessages(formattedMessages)
+          }
+        }
+      } catch (err) {
+        console.error('Failed to load chat history:', err)
+      }
+    }
+    loadMessages()
   }, [])
 
   useSwipe({
@@ -105,10 +131,10 @@ export function ChatInterface() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [messages, isTyping])
 
-  const isLimitReached = messagesLeft !== null && messagesLeft <= 0
+  const isLimitReached = false // Disabled for beta - change to: messagesLeft !== null && messagesLeft <= 0
 
   const handleSendMessage = async (content: string) => {
-    if (!content.trim() || isLoading || isLimitReached) return
+    if (!content.trim() || isLoading) return // Removed isLimitReached check for beta
 
     haptic.light()
     setShowGreeting(false)
@@ -137,6 +163,7 @@ export function ChatInterface() {
       if (!res.ok) {
         const data = await res.json().catch(() => null)
 
+        /* COMMENTED OUT FOR BETA - RESTORE WHEN IMPLEMENTING PAID TIERS
         if (res.status === 403 && data?.limit_reached) {
           setMessagesLeft(0)
           haptic.medium()
@@ -145,6 +172,7 @@ export function ChatInterface() {
           setIsLoading(false)
           return
         }
+        */
 
         if (res.status === 401) {
           setError("Session expired. Please log in again.")
@@ -177,9 +205,12 @@ export function ChatInterface() {
       }
 
       setMessages((prev) => [...prev, assistantMessage])
+      
+      /* COMMENTED OUT FOR BETA - RESTORE WHEN IMPLEMENTING PAID TIERS
       setMessagesLeft(
         data.messages_remaining !== null ? Math.max(0, data.messages_remaining) : null
       )
+      */
 
       if (data.limit_reached) {
         haptic.medium()
@@ -203,11 +234,9 @@ export function ChatInterface() {
     <div className="flex flex-col h-[calc(100vh-4rem)] md:h-[calc(100vh-4rem)]">
       <div className="border-b border-border bg-muted/30 px-4 py-3">
         <div className="container max-w-4xl mx-auto flex items-center justify-between">
-          <span className="text-sm text-muted-foreground">
-            {messagesLeft === null ? "Premium" : "Free Trial"}
-          </span>
+          <span className="text-sm text-muted-foreground">Beta Testing</span>
           <Badge variant="secondary" className="bg-accent text-accent-foreground">
-            {messagesLeft === null ? "Unlimited messages" : `${messagesLeft} messages left`}
+            Unlimited Messages
           </Badge>
         </div>
       </div>
@@ -225,14 +254,15 @@ export function ChatInterface() {
           </div>
         )}
 
-        {(isLimitReached || error) && (
+        {error && (
           <div className="absolute top-3 left-0 right-0 z-20 flex justify-center px-4">
             <div className="max-w-md w-full bg-card rounded-2xl p-3 shadow border border-border text-sm text-center">
-              {error && <p className="text-destructive mb-1">{error}</p>}
+              <p className="text-destructive mb-1">{error}</p>
             </div>
           </div>
         )}
 
+        {/* COMMENTED OUT FOR BETA - RESTORE WHEN IMPLEMENTING PAID TIERS
         {isLimitReached && (
           <div className="absolute inset-0 bg-background/80 backdrop-blur-sm z-10 flex items-center justify-center px-4">
             <div className="max-w-md w-full bg-card rounded-3xl p-8 shadow-lg border border-border text-center">
@@ -264,6 +294,7 @@ export function ChatInterface() {
             </div>
           </div>
         )}
+        */}
 
         {messages.length > 0 && showGreeting && <GreetingOverlay userName="Friend" />}
 
@@ -290,7 +321,7 @@ export function ChatInterface() {
         <div className="container max-w-4xl mx-auto">
           <ChatInput
             onSendMessage={handleSendMessage}
-            disabled={isLimitReached || isLoading}
+            disabled={isLoading}
             onFocus={handleInputFocus}
           />
         </div>
