@@ -30,11 +30,16 @@ import {
 } from "lucide-react"
 import { haptic } from "@/lib/haptic"
 import { useToast } from "@/hooks/use-toast"
+import { useAuth } from "@/lib/supabase/auth-context"
+
+
 
 export function SettingsContent() {
   const router = useRouter()
   const { toast } = useToast()
   const [isBirthDetailsExpanded, setIsBirthDetailsExpanded] = useState(true)
+  const { userId, loading: authLoading } = useAuth()
+
 
   const [userData, setUserData] = useState<{
     name: string
@@ -60,47 +65,48 @@ export function SettingsContent() {
 
   // Load active/current birth details + user email
   useEffect(() => {
+    if (authLoading) return
+    if (!userId) return
+
     async function loadSettingsData() {
       try {
-        // 1) Birth details
+        setIsBirthDetailsLoading(true)
+
         const bdRes = await fetch("/api/birth-details/current", {
           cache: "no-store",
         })
+
         let birthDetail = null
         if (bdRes.ok) {
           const bdData = await bdRes.json()
-          birthDetail = bdData.birthDetail // Updated to match new API response
+          birthDetail = bdData.birthDetail
         }
 
-        // 2) User email - for now empty, can add /api/me later
-        const email = ""
+        const email = "" // placeholder for now
 
         if (birthDetail) {
           setHasBirthDetail(true)
           setUserData({
-            name: birthDetail.name || "",
+            name: birthDetail.name ?? "",
             email,
-            birthDate: birthDetail.birth_date || "",
-            birthTime: birthDetail.birth_time || "",
-            birthCity: birthDetail.birth_city || "",
-            timezone: birthDetail.timezone || "",
+            birthDate: birthDetail.birth_date ?? "",
+            birthTime: birthDetail.birth_time ?? "",
+            birthCity: birthDetail.birth_city ?? "",
+            timezone: birthDetail.timezone ?? "",
           })
         } else {
           setHasBirthDetail(false)
-          setUserData((prev) => ({
-            ...prev,
-            email,
-          }))
         }
       } catch (e) {
         console.error("Failed to load settings data", e)
+        setHasBirthDetail(false)
       } finally {
         setIsBirthDetailsLoading(false)
       }
     }
 
     loadSettingsData()
-  }, [])
+  }, [authLoading, userId])
 
   const handleLogout = () => {
     haptic.medium()

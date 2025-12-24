@@ -3,6 +3,8 @@ import type { Metadata } from "next"
 import { DM_Serif_Display, Plus_Jakarta_Sans } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
+import { AuthProvider } from "@/lib/supabase/auth-context"
+
 
 const dmSerifDisplay = DM_Serif_Display({
   weight: "400",
@@ -46,7 +48,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${plusJakartaSans.variable} ${dmSerifDisplay.variable} font-sans antialiased`}>
-        {children}
+        <AuthProvider>
+          {children}
+        </AuthProvider>
         <Analytics />
       </body>
     </html>
