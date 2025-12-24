@@ -54,6 +54,9 @@ export function SettingsContent() {
 
   const [isBirthDetailsLoading, setIsBirthDetailsLoading] = useState(true)
   const [hasBirthDetail, setHasBirthDetail] = useState<boolean>(false)
+  
+  console.log("RENDER — hasBirthDetail:", hasBirthDetail)
+  console.log("RENDER — userData:", userData)
 
   // Load active/current birth details + user email
   useEffect(() => {
