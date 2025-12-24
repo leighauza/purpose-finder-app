@@ -1,7 +1,7 @@
 // lib/calculateVedicCharts.ts
 import { DateTime } from 'luxon';
-import { getProkeralaClient } from './prokerala';
-import { mapProkeralaToVedicCharts } from './mapProkerala';
+import { getProkeralaClient } from '../lib/prokerala';
+import { mapProkeralaToVedicCharts } from '../lib/mapProkerala';
 
 function toProkeralaDateTime(
   birthDate: string,
@@ -21,7 +21,7 @@ export async function calculateAndSaveVedicCharts(options: {
 }): Promise<{ vedic_chart_id: string }> {
   const { birthDetailId, userId } = options;
 
-  const { supabaseAdmin } = await import('./supabase/admin');
+  const { supabaseAdmin } = await import('../lib/supabase/admin');
 
   // 1) Load birth_details
   const { data: birthDetail, error: bdError } = await supabaseAdmin
