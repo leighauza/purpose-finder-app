@@ -54,7 +54,7 @@ export function SettingsContent() {
 
   const [isBirthDetailsLoading, setIsBirthDetailsLoading] = useState(true)
   const [hasBirthDetail, setHasBirthDetail] = useState<boolean>(false)
-  
+
   console.log("RENDER — hasBirthDetail:", hasBirthDetail)
   console.log("RENDER — userData:", userData)
 
@@ -63,7 +63,9 @@ export function SettingsContent() {
     async function loadSettingsData() {
       try {
         // 1) Birth details
-        const bdRes = await fetch("/api/birth-details/current")
+        const bdRes = await fetch("/api/birth-details/current", {
+          cache: "no-store",
+        })
         let birthDetail = null
         if (bdRes.ok) {
           const bdData = await bdRes.json()
