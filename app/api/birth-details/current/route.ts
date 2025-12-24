@@ -29,6 +29,15 @@ export async function GET() {
       .limit(1)
       .maybeSingle()
 
+    // ADD THESE LOGS:
+    console.log("Raw query result:", { 
+      hasData: !!data, 
+      dataValue: data,
+      hasError: !!error, 
+      errorCode: error?.code,
+      errorMessage: error?.message 
+    })  
+
     if (error) {
       console.error("Fetch birth_details error:", error)
       return NextResponse.json(
