@@ -53,6 +53,7 @@ export function SettingsContent() {
   })
 
   const [isBirthDetailsLoading, setIsBirthDetailsLoading] = useState(true)
+  const [hasBirthDetail, setHasBirthDetail] = useState<boolean>(false)
 
   // Load active/current birth details + user email
   useEffect(() => {
@@ -70,6 +71,7 @@ export function SettingsContent() {
         const email = ""
 
         if (birthDetail) {
+          setHasBirthDetail(true)
           setUserData({
             name: birthDetail.name || "",
             email,
@@ -79,6 +81,7 @@ export function SettingsContent() {
             timezone: birthDetail.timezone || "",
           })
         } else {
+          setHasBirthDetail(false)
           setUserData((prev) => ({
             ...prev,
             email,
@@ -206,7 +209,7 @@ Timezone: ${userData.timezone || "Unknown"}`
           <CardContent className="space-y-4 animate-in slide-in-from-top-2 duration-200">
             {isBirthDetailsLoading ? (
               <p className="text-sm text-muted-foreground">Loading birth details...</p>
-            ) : !userData.birthDate ? (
+            ) : !hasBirthDetail ? (
               <p className="text-sm text-muted-foreground">
                 No birth details saved yet. Click &quot;Edit Birth Details&quot; to add them.
               </p>
